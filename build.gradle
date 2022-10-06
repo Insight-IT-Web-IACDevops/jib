@@ -261,7 +261,6 @@ subprojects {
 
   /* JAR */
   jar {
-    version += "-PATCH"
     manifest {
       attributes 'Implementation-Title': project.name,
                  'Implementation-Version': archiveVersion,
