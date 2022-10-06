@@ -302,7 +302,7 @@ subprojects {
             // name = ''
             // description = ''
 
-            url = 'https://github.com/GoogleContainerTools/jib'
+            url = 'https://github.com/Insight-IT-Web-IACDevops/jib'
             inceptionYear = '2018'
 
             licenses {
@@ -339,9 +339,9 @@ subprojects {
               }
             }
             scm {
-              url = 'https://github.com/GoogleContainerTools/jib'
-              connection = 'scm:https://github.com/GoogleContainerTools/jib.git'
-              developerConnection = 'scm:git://github.com/GoogleContainerTools/jib.git'
+              url = 'https://github.com/Insight-IT-Web-IACDevops/jib'
+              connection = 'scm:https://github.com/Insight-IT-Web-IACDevops/jib.git'
+              developerConnection = 'scm:git://github.com/Insight-IT-Web-IACDevops/jib.git'
             }
           }
         }
