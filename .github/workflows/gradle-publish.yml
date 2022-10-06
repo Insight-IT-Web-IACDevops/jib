@@ -39,5 +39,5 @@ jobs:
       with:
         arguments: publish
       env:
-        USERNAME: ${{ github.repository_owner }}
+        USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.REGISTRY_TOKEN }}
