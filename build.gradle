@@ -311,6 +311,7 @@ subprojects {
             // to be filled by subproject after calling configure configureMavenRelease
             // name = ''
             // description = ''
+            version += "-PATCH"
 
             url = 'https://github.com/Insight-IT-Web-IACDevops/jib'
             inceptionYear = '2018'
