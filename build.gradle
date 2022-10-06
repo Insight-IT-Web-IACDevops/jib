@@ -5,6 +5,7 @@ plugins {
   id 'net.researchgate.release' version '2.8.1' apply false
   id 'com.gradle.plugin-publish' version '1.0.0' apply false
   id 'io.freefair.maven-plugin' version '5.3.3.3' apply false
+  id 'maven-publish' apply false
 
   // apply so that we can collect quality metrics at the root project level
   id 'org.sonarqube' version '3.4.0.2513'
@@ -64,6 +65,27 @@ import net.ltgt.gradle.errorprone.CheckSeverity
 // java-gradle-plugin (in jib-gradle-plugin) auto applies java-library, so ensure that happens first
 ['jib-core', 'jib-gradle-plugin', 'jib-gradle-plugin-extension-api', 'jib-maven-plugin-extension-api'].each { projectName ->
   project(projectName).apply plugin: 'java-library'
+}
+
+subprojects {
+    apply plugin: "maven-publish"
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/Insight-IT-Web-IACDevops/jib")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
 }
 
 subprojects {
