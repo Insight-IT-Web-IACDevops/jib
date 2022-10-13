@@ -261,6 +261,7 @@ subprojects {
 
   /* JAR */
   jar {
+    archiveClassifier = "PATCH"
     manifest {
       attributes 'Implementation-Title': project.name,
                  'Implementation-Version': archiveVersion,
