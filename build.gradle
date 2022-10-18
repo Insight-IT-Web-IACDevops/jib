@@ -216,9 +216,9 @@ subprojects {
   dependencies {
     integrationTestImplementation sourceSets.main.output
     integrationTestImplementation sourceSets.test.output
-    integrationTestImplementation configurations.compile
+    integrationTestImplementation configurations.implementation
     integrationTestImplementation configurations.testImplementation
-    integrationTestImplementation configurations.runtime
+    integrationTestImplementation configurations.runtimeClasspath
     integrationTestImplementation configurations.testRuntime
   }
 
@@ -231,6 +231,7 @@ subprojects {
 
 
   task integrationTestJar(type: Jar) {
+    duplicatesStrategy = 'include'
     from sourceSets.integrationTest.output.classesDirs
     classifier = 'integration-tests'
   }
@@ -261,6 +262,7 @@ subprojects {
 
   /* JAR */
   jar {
+    duplicatesStrategy = 'include'
     manifest {
       attributes 'Implementation-Title': project.name,
                  'Implementation-Version': archiveVersion,
