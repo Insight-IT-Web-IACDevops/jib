@@ -287,11 +287,13 @@ subprojects {
   project.ext.configureMavenRelease = {
     apply plugin: 'maven-publish'
     task sourceJar(type: Jar) {
+      duplicatesStrategy = 'include'
       from sourceSets.main.allJava
       classifier 'sources'
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
+      duplicatesStrategy = 'include'
       from javadoc.destinationDir
       classifier 'javadoc'
     }
