@@ -60,9 +60,9 @@ release {
     'com.google.cloud.tools:jib-core',
     'com.google.cloud.tools:jib-plugins-common',
   ]
-  git {
-    requireBranch = /^cli-release-v\d+.*$/  //regex
-  }
+//  git {
+//    requireBranch = /^cli-release-v\d+.*$/  //regex
+//  }
 }
 
 /* ECLIPSE */

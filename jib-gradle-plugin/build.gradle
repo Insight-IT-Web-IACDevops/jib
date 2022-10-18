@@ -56,9 +56,9 @@ release {
     'com.google.cloud.tools:jib-core',
     'com.google.cloud.tools:jib-plugins-common',
   ]
-  git {
-    requireBranch = /^gradle-release-v\d+.*$/  //regex
-  }
+//  git {
+//    requireBranch = /^gradle-release-v\d+.*$/  //regex
+//  }
 }
 // Gradle Plugin Portal releases
 pluginBundle {
