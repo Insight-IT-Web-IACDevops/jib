@@ -175,7 +175,7 @@ subprojects {
 
   /* TEST CONFIG */
   tasks.withType(Test) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     reports.html.setDestination file("${reporting.baseDir}/${name}")
   }
 
