@@ -37,9 +37,9 @@ publishing {
 // Release plugin (git release commits and version updates)
 release {
   tagTemplate = 'v$version-extension-common'
-//  git {
-//    requireBranch = /^extension-common-release-v\d+.*$/  //regex
-//  }
+  git {
+    requireBranch = /^extension-common-release-v\d+.*$/  //regex
+  }
 }
 /* RELEASE */
 

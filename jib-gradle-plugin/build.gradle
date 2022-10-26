@@ -20,7 +20,6 @@ if (version.contains('SNAPSHOT')) {
   }
 
   task install {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn publishToMavenLocal
   }
 }
@@ -46,7 +45,7 @@ dependencies {
   integrationTestImplementation dependencyStrings.JBCRYPT
 
   // only for testing a concrete Spring Boot example in a test (not for test infrastructure)
-  testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.4'
+  testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.2.11.RELEASE'
 }
 
 /* RELEASE */
@@ -57,9 +56,9 @@ release {
     'com.google.cloud.tools:jib-core',
     'com.google.cloud.tools:jib-plugins-common',
   ]
-//  git {
-//    requireBranch = /^gradle-release-v\d+.*$/  //regex
-//  }
+  git {
+    requireBranch = /^gradle-release-v\d+.*$/  //regex
+  }
 }
 // Gradle Plugin Portal releases
 pluginBundle {

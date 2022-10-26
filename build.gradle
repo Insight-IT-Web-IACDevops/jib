@@ -2,7 +2,7 @@
 plugins {
   id 'com.github.sherter.google-java-format' version '0.9' apply false
   id 'net.ltgt.errorprone' version '3.0.1' apply false
-  id 'net.researchgate.release' version '3.0.2' apply false
+  id 'net.researchgate.release' version '2.8.1' apply false
   id 'com.gradle.plugin-publish' version '1.0.0' apply false
   id 'io.freefair.maven-plugin' version '5.3.3.3' apply false
 
@@ -18,7 +18,7 @@ project.ext.dependencyStrings = [
   // - https://github.com/googleapis/java-cloud-bom
   GOOGLE_HTTP_CLIENT: 'com.google.http-client:google-http-client:1.42.2',
   GOOGLE_HTTP_CLIENT_APACHE_V2: 'com.google.http-client:google-http-client-apache-v2:1.42.2',
-  GOOGLE_AUTH_LIBRARY_OAUTH2_HTTP: 'com.google.auth:google-auth-library-oauth2-http:1.11.0',
+  GOOGLE_AUTH_LIBRARY_OAUTH2_HTTP: 'com.google.auth:google-auth-library-oauth2-http:1.10.0',
   GUAVA: 'com.google.guava:guava:31.1-jre',
   JSR305: 'com.google.code.findbugs:jsr305:3.0.2', // transitively pulled in by GUAVA
 
@@ -29,7 +29,7 @@ project.ext.dependencyStrings = [
   MAVEN_EXTENSION: 'com.google.cloud.tools:jib-maven-plugin-extension-api:0.4.0',
 
   COMMONS_COMPRESS: 'org.apache.commons:commons-compress:1.21',
-  ZSTD_JNI: 'com.github.luben:zstd-jni:1.5.2-4',
+  ZSTD_JNI: 'com.github.luben:zstd-jni:1.5.2-5',
   COMMONS_TEXT: 'org.apache.commons:commons-text:1.10.0',
   JACKSON_BOM: 'com.fasterxml.jackson:jackson-bom:2.13.4.20221013',
   JACKSON_DATABIND: 'com.fasterxml.jackson.core:jackson-databind',
@@ -50,7 +50,7 @@ project.ext.dependencyStrings = [
   JUNIT_PARAMS: 'pl.pragmatists:JUnitParams:1.1.1',
   MAVEN_TESTING_HARNESS: 'org.apache.maven.plugin-testing:maven-plugin-testing-harness:3.3.0',
   MAVEN_VERIFIER: 'org.apache.maven.shared:maven-verifier:1.8.0',
-  MOCKITO_CORE: 'org.mockito:mockito-core:4.8.0',
+  MOCKITO_CORE: 'org.mockito:mockito-core:4.8.1',
   SISU_PLEXUS: 'org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.5',
   SLF4J_API: 'org.slf4j:slf4j-api:2.0.3',
   SLF4J_SIMPLE: 'org.slf4j:slf4j-simple:2.0.3',
@@ -94,7 +94,6 @@ subprojects {
   // Use this to ensure we correctly override transitive dependencies
   // TODO: There might be a plugin that does this
   task ensureTransitiveDependencyOverrides {
-    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     def dependenciesList = [dependencyStrings.GOOGLE_HTTP_CLIENT, dependencyStrings.GOOGLE_HTTP_CLIENT_APACHE_V2]
     def rules = dependenciesList.collectEntries{[/*name*/ it.split(':')[1], /*version*/ it.split(':')[2]]}
     doLast {
@@ -116,17 +115,16 @@ subprojects {
   dependencies {
     // NullAway errorprone plugin
     annotationProcessor 'com.uber.nullaway:nullaway:0.10.2'
-    errorprone 'com.google.errorprone:error_prone_core:2.16'
+    errorprone 'com.google.errorprone:error_prone_core:2.10.0'
     // Using github.com/google/error-prone-javac is required when running on
     // JDK 8. Remove when migrating to JDK 11.
     if (System.getProperty('java.version').startsWith('1.8.')) {
-      errorproneJavac('com.google.errorprone:javac:1+')
+      errorproneJavac('com.google.errorprone:javac:9+181-r4173-1')
     }
   }
 
   // Adds NullAway errorprone checks.
   tasks.withType(JavaCompile) {
-    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     if (!name.toLowerCase().contains('test')) {
       options.errorprone {
         check('NullAway', CheckSeverity.ERROR)
@@ -175,7 +173,6 @@ subprojects {
 
   /* TEST CONFIG */
   tasks.withType(Test) {
-    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     reports.html.setDestination file("${reporting.baseDir}/${name}")
   }
 
@@ -188,7 +185,6 @@ subprojects {
   // jar to export tests classes for import in other project by doing:
   // testCompile project(path:':project-name', configuration:'tests')
   task testJar(type: Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from sourceSets.test.output.classesDirs
     classifier = 'tests'
   }
@@ -220,15 +216,14 @@ subprojects {
   dependencies {
     integrationTestImplementation sourceSets.main.output
     integrationTestImplementation sourceSets.test.output
-    integrationTestImplementation configurations.implementation
+    integrationTestImplementation configurations.compile
     integrationTestImplementation configurations.testImplementation
-    integrationTestImplementation configurations.runtimeClasspath
+    integrationTestImplementation configurations.runtime
     integrationTestImplementation configurations.testRuntime
   }
 
   // Integration tests must be run explicitly
   task integrationTest(type: Test) {
-    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     systemProperty '_JIB_DISABLE_USER_AGENT', true
@@ -236,8 +231,6 @@ subprojects {
 
 
   task integrationTestJar(type: Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    duplicatesStrategy = 'include'
     from sourceSets.integrationTest.output.classesDirs
     classifier = 'integration-tests'
   }
@@ -261,7 +254,6 @@ subprojects {
   /* JAVADOC ENFORCEMENT */
   // Fail build on javadoc warnings
   tasks.withType(Javadoc) {
-    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     options.addBooleanOption('Xwerror', true)
   }
   assemble.dependsOn javadoc
@@ -269,7 +261,6 @@ subprojects {
 
   /* JAR */
   jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
       attributes 'Implementation-Title': project.name,
                  'Implementation-Version': archiveVersion,
@@ -294,14 +285,11 @@ subprojects {
   project.ext.configureMavenRelease = {
     apply plugin: 'maven-publish'
     task sourceJar(type: Jar) {
-      duplicatesStrategy = 'include'
       from sourceSets.main.allJava
       classifier 'sources'
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-      duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-      duplicatesStrategy = 'include'
       from javadoc.destinationDir
       classifier 'javadoc'
     }
@@ -367,13 +355,8 @@ subprojects {
       dependsOn publishToMavenLocal
     }
 
-    task initConfig(type: Copy) {
-      duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
     // For kokoro sign and release to maven central
     task prepareRelease(type: Copy) {
-      duplicatesStrategy = DuplicatesStrategy.EXCLUDE
       from jar
       from sourceJar
       from javadocJar
@@ -453,14 +436,12 @@ subprojects {
 
   /* LOCAL DEVELOPMENT HELPER TASKS */
   tasks.register('dev') {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     classes.dependsOn tasks.googleJavaFormat
     dependsOn check
     dependsOn javadoc
   }
 
   tasks.register('devFull') {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn dev
     dependsOn integrationTest
   }

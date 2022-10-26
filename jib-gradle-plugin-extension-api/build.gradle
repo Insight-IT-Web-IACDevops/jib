@@ -43,9 +43,9 @@ publishing {
 // Release plugin (git release commits and version updates)
 release {
   tagTemplate = 'v$version-gradle-extension'
-//  git {
-//    requireBranch = /^gradle-extension-release-v\d+.*$/  //regex
-//  }
+  git {
+    requireBranch = /^gradle-extension-release-v\d+.*$/  //regex
+  }
 }
 /* RELEASE */
 
