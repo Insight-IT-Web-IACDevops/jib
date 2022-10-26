@@ -126,7 +126,7 @@ subprojects {
 
   // Adds NullAway errorprone checks.
   tasks.withType(JavaCompile) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     if (!name.toLowerCase().contains('test')) {
       options.errorprone {
         check('NullAway', CheckSeverity.ERROR)
