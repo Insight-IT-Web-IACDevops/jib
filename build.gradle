@@ -228,7 +228,7 @@ subprojects {
 
   // Integration tests must be run explicitly
   task integrationTest(type: Test) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     systemProperty '_JIB_DISABLE_USER_AGENT', true
