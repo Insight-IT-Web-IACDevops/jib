@@ -94,6 +94,7 @@ subprojects {
   // Use this to ensure we correctly override transitive dependencies
   // TODO: There might be a plugin that does this
   task ensureTransitiveDependencyOverrides {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     def dependenciesList = [dependencyStrings.GOOGLE_HTTP_CLIENT, dependencyStrings.GOOGLE_HTTP_CLIENT_APACHE_V2]
     def rules = dependenciesList.collectEntries{[/*name*/ it.split(':')[1], /*version*/ it.split(':')[2]]}
     doLast {
@@ -125,6 +126,7 @@ subprojects {
 
   // Adds NullAway errorprone checks.
   tasks.withType(JavaCompile) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     if (!name.toLowerCase().contains('test')) {
       options.errorprone {
         check('NullAway', CheckSeverity.ERROR)
@@ -173,6 +175,7 @@ subprojects {
 
   /* TEST CONFIG */
   tasks.withType(Test) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     reports.html.setDestination file("${reporting.baseDir}/${name}")
   }
 
@@ -185,6 +188,7 @@ subprojects {
   // jar to export tests classes for import in other project by doing:
   // testCompile project(path:':project-name', configuration:'tests')
   task testJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from sourceSets.test.output.classesDirs
     classifier = 'tests'
   }
@@ -224,6 +228,7 @@ subprojects {
 
   // Integration tests must be run explicitly
   task integrationTest(type: Test) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     systemProperty '_JIB_DISABLE_USER_AGENT', true
@@ -231,6 +236,7 @@ subprojects {
 
 
   task integrationTestJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     duplicatesStrategy = 'include'
     from sourceSets.integrationTest.output.classesDirs
     classifier = 'integration-tests'
@@ -255,6 +261,7 @@ subprojects {
   /* JAVADOC ENFORCEMENT */
   // Fail build on javadoc warnings
   tasks.withType(Javadoc) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     options.addBooleanOption('Xwerror', true)
   }
   assemble.dependsOn javadoc
@@ -262,7 +269,7 @@ subprojects {
 
   /* JAR */
   jar {
-    duplicatesStrategy = 'include'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
       attributes 'Implementation-Title': project.name,
                  'Implementation-Version': archiveVersion,
@@ -293,6 +300,7 @@ subprojects {
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
+      duplicatesStrategy = DuplicatesStrategy.EXCLUDE
       duplicatesStrategy = 'include'
       from javadoc.destinationDir
       classifier 'javadoc'
@@ -361,6 +369,7 @@ subprojects {
 
     // For kokoro sign and release to maven central
     task prepareRelease(type: Copy) {
+      duplicatesStrategy = DuplicatesStrategy.EXCLUDE
       from jar
       from sourceJar
       from javadocJar
@@ -440,12 +449,14 @@ subprojects {
 
   /* LOCAL DEVELOPMENT HELPER TASKS */
   tasks.register('dev') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     classes.dependsOn tasks.googleJavaFormat
     dependsOn check
     dependsOn javadoc
   }
 
   tasks.register('devFull') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn dev
     dependsOn integrationTest
   }
