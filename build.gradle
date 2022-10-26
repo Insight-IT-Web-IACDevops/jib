@@ -261,7 +261,7 @@ subprojects {
   /* JAVADOC ENFORCEMENT */
   // Fail build on javadoc warnings
   tasks.withType(Javadoc) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     options.addBooleanOption('Xwerror', true)
   }
   assemble.dependsOn javadoc
