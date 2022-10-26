@@ -91,9 +91,7 @@ subprojects {
   compileJava.options.compilerArgs += [ '-Xlint:deprecation' ]
   compileTestJava.options.compilerArgs += [ '-Xlint:deprecation' ]
 
-  task processResources {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  }
+  def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   // Use this to ensure we correctly override transitive dependencies
   // TODO: There might be a plugin that does this
