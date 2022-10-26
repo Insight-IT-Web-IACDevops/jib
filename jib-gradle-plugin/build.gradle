@@ -20,6 +20,7 @@ if (version.contains('SNAPSHOT')) {
   }
 
   task install {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn publishToMavenLocal
   }
 }
