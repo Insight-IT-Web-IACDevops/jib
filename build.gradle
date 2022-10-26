@@ -94,7 +94,7 @@ subprojects {
   // Use this to ensure we correctly override transitive dependencies
   // TODO: There might be a plugin that does this
   task ensureTransitiveDependencyOverrides {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     def dependenciesList = [dependencyStrings.GOOGLE_HTTP_CLIENT, dependencyStrings.GOOGLE_HTTP_CLIENT_APACHE_V2]
     def rules = dependenciesList.collectEntries{[/*name*/ it.split(':')[1], /*version*/ it.split(':')[2]]}
     doLast {
