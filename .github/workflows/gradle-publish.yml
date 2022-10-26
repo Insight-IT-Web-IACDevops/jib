@@ -30,7 +30,7 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971
       with:
-        arguments: build
+        arguments: clean build
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
